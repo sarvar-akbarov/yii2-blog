@@ -21,12 +21,12 @@
         "yiister/yii2-gentelella": "~1.0",
         "codemix/yii2-localeurls": "dev-master",
         "johnitvn/yii2-ajaxcrud": "*",
-        "kartik-v/yii2-checkbox-x": "dev-master"
+        "katzz0/yii2-yandex-maps": "dev-master",
+        "yiisoft/yii2-faker": "^2.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
         "yiisoft/yii2-gii": "~2.1.0",
-        "yiisoft/yii2-faker": "~2.0.0",
         "codeception/codeception": "^4.0",
         "codeception/verify": "~0.5.0 || ~1.1.0",
         "codeception/specify": "~0.4.6",

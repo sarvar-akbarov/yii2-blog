@@ -2,28 +2,29 @@
 
 namespace app\models;
 
+use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Languages;
+use app\models\AboutCompany;
 
 /**
- * LanguagesSearch represents the model behind the search form of `app\models\Languages`.
+ * AboutCompanySearch represents the model behind the search form about `app\models\AboutCompany`.
  */
-class LanguagesSearch extends Languages
+class AboutCompanySearch extends AboutCompany
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['id', 'default', 'status'], 'integer'],
-            [['code', 'name'], 'safe'],
+            [['id'], 'integer'],
+            [['logo', 'address', 'phone', 'email', 'coor_x', 'coor_y'], 'safe'],
         ];
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function scenarios()
     {
@@ -40,9 +41,7 @@ class LanguagesSearch extends Languages
      */
     public function search($params)
     {
-        $query = Languages::find();
-
-        // add conditions that should always apply here
+        $query = AboutCompany::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -56,15 +55,16 @@ class LanguagesSearch extends Languages
             return $dataProvider;
         }
 
-        // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'default' => $this->default,
-            'status' => $this->status,
         ]);
 
-        $query->andFilterWhere(['like', 'code', $this->code])
-            ->andFilterWhere(['like', 'name', $this->name]);
+        $query->andFilterWhere(['like', 'logo', $this->logo])
+            ->andFilterWhere(['like', 'address', $this->address])
+            ->andFilterWhere(['like', 'phone', $this->phone])
+            ->andFilterWhere(['like', 'email', $this->email])
+            ->andFilterWhere(['like', 'coor_x', $this->coor_x])
+            ->andFilterWhere(['like', 'coor_y', $this->coor_y]);
 
         return $dataProvider;
     }

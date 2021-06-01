@@ -28,7 +28,7 @@ class User extends Users implements \yii\web\IdentityInterface
      */
     public static function findByUsername($username)
     {
-        return self::find()->where(['username'=>$username])->one();
+        return self::find()->where(['login'=>$username])->one();
     }
 
     /**
@@ -44,7 +44,7 @@ class User extends Users implements \yii\web\IdentityInterface
      */
     public function getAuthKey()
     {
-        return $this->authKey;
+        return "";
     }
 
     /**
@@ -52,7 +52,7 @@ class User extends Users implements \yii\web\IdentityInterface
      */
     public function validateAuthKey($authKey)
     {
-        return $this->authKey === $authKey;
+        return true;
     }
 
     /**
@@ -63,6 +63,6 @@ class User extends Users implements \yii\web\IdentityInterface
      */
     public function validatePassword($password)
     {
-        return \Yii::$app->getSecurity()->validatePassword($password, $this->password_hash);
+        return \Yii::$app->getSecurity()->validatePassword($password, $this->password);
     }
 }

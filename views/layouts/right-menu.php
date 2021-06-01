@@ -25,11 +25,11 @@
             ],
             [
                 "label" => "Foydalanuvchilar",
-                "url" => ["/metodists"],
+                "url" => ["/users"],
                 "icon" => "users"
             ],
 
-            ["label" => "Ko'rsatmalar", "url" => ["/instructions"], "icon" => "tasks"],
+            ["label" => "Kategoriyalar", "url" => ["/blog-category"], "icon" => "tasks"],
             [
                 "label" => "Sozlamalar",
                 "url" => "#",
@@ -38,6 +38,11 @@
                     [
                         "label" => 'Biz haqimizda',
                         "url" => ["/about-company"],
+                        "badgeOptions" => ["class" => "label-success"],
+                    ],
+                    [
+                        "label" => 'Til',
+                        "url" => ["/language"],
                         "badgeOptions" => ["class" => "label-success"],
                     ],
                     
