@@ -24,6 +24,7 @@ use yii\widgets\ActiveForm;
         </div>
         <div class="col-md-10">
             <?=$this->render('_translatable_attributes', [
+                'form' => $form,
                 'languages' => $languages,
                 'model' => $model
             ])?>

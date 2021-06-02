@@ -21,6 +21,8 @@ use Yii;
  */
 class BlogCategory extends \yii\db\ActiveRecord
 {
+    public $translatableAttr;
+    public $tab = 1; // active tab
     /**
      * {@inheritdoc}
      */
@@ -36,10 +38,11 @@ class BlogCategory extends \yii\db\ActiveRecord
     {
         return [
             [['keyword','status'],'required'],
-            [['numlevel', 'status', 'parent_id'], 'integer'],
+            [['numlevel', 'status', 'parent_id', 'tab'], 'integer'],
             [['keyword'], 'string'],
             [['icon_b', 'icon_s'], 'string', 'max' => 255],
             [['parent_id'], 'exist', 'skipOnError' => true, 'targetClass' => BlogCategory::className(), 'targetAttribute' => ['parent_id' => 'id']],
+            [['translatableAttr'],'safe']
         ];
     }
 
@@ -75,6 +78,22 @@ class BlogCategory extends \yii\db\ActiveRecord
             'keyword' => 'Keyword',
             'status' => 'Статус',
             'parent_id' => 'Парент категория',
+            //----------------------tarjima uchun maydonlar------------------------
+            'title'  => 'Заголовок',
+            //--------------------SEO Поиск в категории------------
+            'mtitle'  => 'Заголовок (title)',
+            'mkeywords'  => 'Ключевые слова (meta keywords)',
+            'mdescription'  => 'Описание (meta description)',
+            'titleh1'  => 'Заголовок H1',
+            'seotext'  => 'SEO текст',
+            'breadcrumb'  => 'Хлебная крошка',
+            //------------------SEO Просмотр объявления------------
+            'view_mtitle'  => 'Заголовок (title )',
+            'view_mkeywords'  => 'Ключевые слова (meta keywords)',
+            'view_mdescription'  => 'Описание (meta description)',
+            'view_share_title'  => 'Заголовок (поделиться в соц. сетях)',
+            'view_share_description'  => 'Описание (поделиться в соц. сетях)',
+            'view_share_sitename'  => 'Название сайта (поделиться в соц. сетях)',
         ];
     }
 
