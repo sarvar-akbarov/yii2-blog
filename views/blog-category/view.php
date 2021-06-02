@@ -10,13 +10,27 @@ use yii\widgets\DetailView;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'numlevel',
-            'icon_b',
-            'icon_s',
+            [
+                'attribute'=>'icon_s',
+                'format' => 'html',
+                'value' => function($model){
+                    return $model->getLogo();
+                }
+            ],
+            [
+                'attribute'=>'icon_b',
+                'format' => 'html',
+                'value' => function($model){
+                    return $model->getLogo(false);
+                }
+            ],
             'keyword:ntext',
-            'status',
-            'parent_id',
+            [
+                'attribute'=>'status',
+                'value' => function($model){
+                    return getStatus()[$model->status];
+                }
+            ],
         ],
     ]) ?>
 

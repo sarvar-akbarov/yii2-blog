@@ -10,21 +10,13 @@ return [
         'class' => 'kartik\grid\SerialColumn',
         'width' => '30px',
     ],
-        // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'id',
-    // ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'numlevel',
-    ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'icon_b',
-    ],
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'icon_s',
+        'format' => 'html',
+        'content' => function($model){
+            return $model->getLogo();
+        }
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
@@ -33,11 +25,10 @@ return [
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'status',
+        'value' => function($model){
+            return getStatus()[$model->status];
+        }
     ],
-    // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'parent_id',
-    // ],
     [
         'class' => 'kartik\grid\ActionColumn',
         'dropdown' => false,
@@ -46,7 +37,7 @@ return [
                 return Url::to([$action,'id'=>$key]);
         },
         'viewOptions'=>['role'=>'modal-remote','title'=>Yii::t('app','View'),'data-toggle'=>'tooltip'],
-        'updateOptions'=>['role'=>'modal-remote','title'=>Yii::t('app','Update'), 'data-toggle'=>'tooltip'],
+        'updateOptions'=>['data-pjax' => 0,'title'=>Yii::t('app','Update'), 'data-toggle'=>'tooltip'],
         'deleteOptions'=>['role'=>'modal-remote','title'=>Yii::t('app','Delete'), 
                           'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
                           'data-request-method'=>'post',

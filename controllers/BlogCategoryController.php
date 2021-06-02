@@ -11,6 +11,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use \yii\web\Response;
 use yii\helpers\Html;
+use yii\web\UploadedFile;
 
 /**
  * BlogCategoryController implements the CRUD actions for BlogCategory model.
@@ -88,8 +89,19 @@ class BlogCategoryController extends Controller
         /*
         *   Process for non-ajax request
         */
-        if ($model->load($request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load($request->post()) && $model->validate()) {
+            dd($request->post());
+            $model->file1 = UploadedFile::getInstance($model, 'file1');
+            $model->file2 = UploadedFile::getInstance($model, 'file2');
+
+            if($model->uploadLogo()){
+                $model->save(false);
+                return $this->redirect(['index']);
+            }else{
+                return $this->render('update', [
+                    'model' => $model,
+                ]);
+            }
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -109,44 +121,30 @@ class BlogCategoryController extends Controller
     {
         $request = Yii::$app->request;
         $model = $this->findModel($id);       
+        $languages = Language::getLanguageList();
+        
+        /*
+        *   Process for non-ajax request
+        */
+        if ($model->load($request->post()) && $model->save()) {
+            $model->file1 = UploadedFile::getInstance($model, 'file1');
+            $model->file2 = UploadedFile::getInstance($model, 'file2');
 
-        if($request->isAjax){
-            /*
-            *   Process for ajax request
-            */
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            if($model->load($request->post()) && $model->save()){
-                return [
-                    'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> Yii::t('app',"BlogCategory #").$id,
-                    'content'=>$this->renderAjax('view', [
-                        'model' => $model,
-                    ]),
-                    'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a(Yii::t('app','Edit'),['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
-                ];    
+            if($model->uploadLogo()){
+                return $this->redirect(['index']);
             }else{
-                 return [
-                    'title'=> Yii::t('app',"Update BlogCategory #").$id,
-                    'content'=>$this->renderAjax('update', [
-                        'model' => $model,
-                    ]),
-                    'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                Html::button(Yii::t('app','Save'),['class'=>'btn btn-primary','type'=>"submit"])
-                ];        
-            }
-        }else{
-            /*
-            *   Process for non-ajax request
-            */
-            if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            } else {
                 return $this->render('update', [
                     'model' => $model,
+                    'languages' => $languages
                 ]);
             }
+        } else {
+            return $this->render('update', [
+                'model' => $model,
+                'languages' => $languages
+            ]);
         }
+        
     }
 
     /**
@@ -159,7 +157,8 @@ class BlogCategoryController extends Controller
     public function actionDelete($id)
     {
         $request = Yii::$app->request;
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $model->delete();
 
         if($request->isAjax){
             /*
