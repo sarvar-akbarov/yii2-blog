@@ -3,20 +3,19 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\BlogCategory;
-use app\models\Language;
-use app\models\BlogCategorySearch;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use \yii\web\Response;
 use yii\helpers\Html;
-use yii\web\UploadedFile;
+use \yii\web\Response;
+use yii\web\Controller;
+use app\models\Language;
+use app\models\BannerItem;
+use yii\filters\VerbFilter;
+use app\models\BannerItemSearch;
+use yii\web\NotFoundHttpException;
 
 /**
- * BlogCategoryController implements the CRUD actions for BlogCategory model.
+ * BannerItemController implements the CRUD actions for BannerItem model.
  */
-class BlogCategoryController extends Controller
+class BannerItemController extends Controller
 {
     /**
      * @inheritdoc
@@ -35,12 +34,12 @@ class BlogCategoryController extends Controller
     }
 
     /**
-     * Lists all BlogCategory models.
+     * Lists all BannerItem models.
      * @return mixed
      */
     public function actionIndex()
     {    
-        $searchModel = new BlogCategorySearch();
+        $searchModel = new BannerItemSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -51,58 +50,58 @@ class BlogCategoryController extends Controller
 
 
     /**
-     * Displays a single BlogCategory model.
+     * Displays a single BannerItem model.
      * @param integer $id
      * @return mixed
      */
     public function actionView($id)
     {   
-        $languages = Language::getLanguageList();
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-            'languages' => $languages 
-        ]);
-    }
-
-    /**
-     * Creates a new BlogCategory model.
-     * For ajax request will return json object
-     * and for non-ajax request if creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate($parent_id = 0)
-    {
         $request = Yii::$app->request;
-        $model = new BlogCategory();  
-        if($parent_id){
-            $model->parent_id = $parent_id;
-        }
-        $languages = Language::getLanguageList();
-        /*
-        *   Process for non-ajax request
-        */
-        if ($model->load($request->post()) && $model->validate()) {
-            $model->file1 = UploadedFile::getInstance($model, 'file1');
-            $model->file2 = UploadedFile::getInstance($model, 'file2');
-
-            if($model->uploadLogo()){
-                $model->save(false);
-                return $this->redirect(['index']);
-            }else{
-                return $this->render('update', [
-                    'model' => $model,
-                ]);
-            }
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-                'languages' => $languages 
+        if($request->isAjax){
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return [
+                    'title'=> Yii::t('app',"BannerItem #").$id,
+                    'content'=>$this->renderAjax('view', [
+                        'model' => $this->findModel($id),
+                    ]),
+                    'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                            Html::a(Yii::t('app','Edit'),['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
+                ];    
+        }else{
+            return $this->render('view', [
+                'model' => $this->findModel($id),
             ]);
         }
     }
 
     /**
-     * Updates an existing BlogCategory model.
+     * Creates a new BannerItem model.
+     * For ajax request will return json object
+     * and for non-ajax request if creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function actionCreate($banner_id)
+    {
+        $request = Yii::$app->request;
+        $model = new BannerItem();  
+        $languages = Language::getLanguageList();
+        $model->banner_id = $banner_id;
+
+        /*
+        *   Process for non-ajax request
+        */
+        if ($model->load($request->post()) && $model->save()) {
+            return $this->redirect(['/banner/view', 'id' => $model->banner_id]);
+        } else {
+            return $this->render('create', [
+                'model' => $model,
+                'languages' => $languages
+            ]);
+        }
+    }
+
+    /**
+     * Updates an existing BannerItem model.
      * For ajax request will return json object
      * and for non-ajax request if update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
@@ -112,34 +111,20 @@ class BlogCategoryController extends Controller
     {
         $request = Yii::$app->request;
         $model = $this->findModel($id);       
-        $languages = Language::getLanguageList();
-        
         /*
         *   Process for non-ajax request
         */
         if ($model->load($request->post()) && $model->save()) {
-            $model->file1 = UploadedFile::getInstance($model, 'file1');
-            $model->file2 = UploadedFile::getInstance($model, 'file2');
-
-            if($model->uploadLogo()){
-                return $this->redirect(['index']);
-            }else{
-                return $this->render('update', [
-                    'model' => $model,
-                    'languages' => $languages
-                ]);
-            }
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
-                'languages' => $languages
             ]);
         }
-        
     }
 
     /**
-     * Delete an existing BlogCategory model.
+     * Delete an existing BannerItem model.
      * For ajax request will return json object
      * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
@@ -148,8 +133,7 @@ class BlogCategoryController extends Controller
     public function actionDelete($id)
     {
         $request = Yii::$app->request;
-        $model = $this->findModel($id);
-        $model->delete();
+        $this->findModel($id)->delete();
 
         if($request->isAjax){
             /*
@@ -168,7 +152,7 @@ class BlogCategoryController extends Controller
     }
 
      /**
-     * Delete multiple existing BlogCategory model.
+     * Delete multiple existing BannerItem model.
      * For ajax request will return json object
      * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
@@ -199,15 +183,15 @@ class BlogCategoryController extends Controller
     }
 
     /**
-     * Finds the BlogCategory model based on its primary key value.
+     * Finds the BannerItem model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return BlogCategory the loaded model
+     * @return BannerItem the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = BlogCategory::findOne($id)) !== null) {
+        if (($model = BannerItem::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException(Yii::t('app','The requested page does not exist.'));

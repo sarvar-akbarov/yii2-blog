@@ -35,7 +35,7 @@ class m210531_135059_create_banner_statistic_table extends Migration
             '{{%fk-banner_statistic-banner_id}}',
             '{{%banner_statistic}}',
             'banner_id',
-            '{{%banner}}',
+            '{{%banner_item}}',
             'id',
             'CASCADE'
         );

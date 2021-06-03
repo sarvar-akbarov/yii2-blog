@@ -5,22 +5,21 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\BlogCategory;
+use app\models\BannerStatistic;
 
 /**
- * BlogCategorySearch represents the model behind the search form about `app\models\BlogCategory`.
+ * BannerStatisticSearch represents the model behind the search form about `app\models\BannerStatistic`.
  */
-class BlogCategorySearch extends BlogCategory
+class BannerStatisticSearch extends BannerStatistic
 {
-    public $title;
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['id', 'numlevel', 'parent_id'], 'integer'],
-            [['icon_b','title', 'icon_s', 'keyword', 'status'], 'safe'],
+            [['id', 'banner_id', 'clicks', 'shows'], 'integer'],
+            [['date'], 'safe'],
         ];
     }
 
@@ -42,7 +41,7 @@ class BlogCategorySearch extends BlogCategory
      */
     public function search($params)
     {
-        $query = BlogCategory::find()->groupBy(['id']);
+        $query = BannerStatistic::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -56,24 +55,13 @@ class BlogCategorySearch extends BlogCategory
             return $dataProvider;
         }
 
-        $query->with('blogCategories');
-        $query->joinWith('translations');
-
         $query->andFilterWhere([
             'id' => $this->id,
-            'numlevel' => $this->numlevel,
-            'parent_id' => $this->parent_id,
-            'status' => $this->status,
+            'banner_id' => $this->banner_id,
+            'date' => $this->date,
+            'clicks' => $this->clicks,
+            'shows' => $this->shows,
         ]);
-
-        $query->andFilterWhere(['like', 'icon_b', $this->icon_b])
-            ->andFilterWhere(['like', 'icon_s', $this->icon_s])
-            ->andFilterWhere(['like', 'keyword', $this->keyword]);
-
-        if($this->title){
-            $query->andWhere(['translate.field_name' => 'title'])
-                ->andFilterWhere(['like', 'translate.field_value', $this->title]);
-        }
 
         return $dataProvider;
     }

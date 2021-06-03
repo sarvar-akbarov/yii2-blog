@@ -25,7 +25,7 @@ class m210531_133650_create_banner_item_table extends Migration
             'show_start' => $this->datetime()->comment("Дата начала"),
             'show_finish' => $this->datetime()->comment("Дата окончание"),
             'show_limit' => $this->integer()->comment("Количество показа"),
-            'status' => $this->integer()->comment(""),// активно - 1, не активно - 0
+            'status' => $this->integer()->comment(""),// активно - 1, не активно - 2
             'target_blank' => $this->boolean()->comment("Таргет"),// Таргет или нет 0 - Нет, 1 - Да
             'sorting_number' => $this->integer()->comment("Порядковый номер"),
             'time' => $this->integer()->comment("Время"),// Время har bir slayd necha sekund aylanishini aniqlaydi

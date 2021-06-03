@@ -3,9 +3,11 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\BlogCategory */
-$this->title = Yii::t('app', 'View Category');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Blog Categories'), 'url' => ['index']];
+/* @var $model app\models\Languages */
+
+$this->title = Yii::t('app', 'Create Banner Item');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Banners'), 'url' => ['/banner/index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'View Banner'), 'url' => ['/banner/view', 'id' => $model->banner_id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="blog-category-index">
@@ -30,11 +32,10 @@ $this->params['breadcrumbs'][] = $this->title;
                   <div class="clearfix"></div>
                </div>
                <div id="crud-datatable-container" class="table-responsive kv-grid-container" style="padding:30px;">
-                  <?= $this->render('_form', [
-                      'readOnly' => true,
-                      'model' => $model,
-                      'languages' => $languages 
-                  ]) ?>
+                    <?= $this->render('_form', [
+                        'model' => $model,
+                        'languages' => $languages 
+                    ]) ?>
                </div>
                <div class="clearfix"></div>
             </div>

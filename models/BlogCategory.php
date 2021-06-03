@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\data\ActiveDataProvider;
 
 /**
  * This is the model class for table "blog_category".
@@ -156,8 +157,28 @@ class BlogCategory extends \yii\db\ActiveRecord
      */
     public function getBlogCategories()
     {
-        return $this->hasMany(BlogCategory::className(), ['parent_id' => 'id']);
+        return $this->hasMany(BlogCategory::className(), ['parent_id' => 'id'])->with('translations');
     }
+
+    public function getSubCategoryDataProvider()
+    {
+        $dataProvider = new ActiveDataProvider([
+            'query' => $this->getBlogCategories()
+//            'sort'=> ['defaultOrder' => ['name'=>SORT_ASC]]
+        ]);
+        return $dataProvider;
+    }
+    
+    /**
+     * Gets query for [[Translate]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTranslations()
+    {
+        return $this->hasMany(Translate::className(), ['model_id' => 'id'])->where(['translate.table_name' => self::tableName()]);
+    }
+
 
     public function beforeSave($insert)
     {
@@ -167,46 +188,11 @@ class BlogCategory extends \yii\db\ActiveRecord
     public function afterSave($insert, $changedAttributes)
     {
         if ($insert) {
-            foreach($this->translatableAttr as $name => $values){
-                foreach($values as $language_id => $value){
-                    $translate = new Translate();
-                    $translate->table_name = self::tableName();
-                    $translate->model_id = $this->id;
-                    $translate->field_name = $name;
-                    $translate->field_description = "";
-                    $translate->field_value = $value;
-                    $translate->language_id = $language_id;
-                    $translate->save();
-                }
-            }
             Yii::$app->session->setFlash('success', 'Запись добавлена');
         } else {
-            foreach($this->translatableAttr as $name => $values){
-                foreach($values as $language_id => $value){
-                    $translate = Translate::find()->where([
-                        'language_id' => $language_id,
-                        'field_name' => $name, 
-                        'model_id' => $this->id,
-                        'table_name' => self::tableName()
-                    ])->one();
-
-                    if($translate){
-                        $translate->field_value = $value;
-                        $translate->save();
-                    }else{
-                        $translate = new Translate();
-                        $translate->table_name = self::tableName();
-                        $translate->model_id = $this->id;
-                        $translate->field_name = $name;
-                        $translate->field_description = "";
-                        $translate->field_value = $value;
-                        $translate->language_id = $language_id;
-                        $translate->save();
-                    }
-                }
-            }
             Yii::$app->session->setFlash('success', 'Запись обновлена');
         }
+        Translate::saveTranslations($this);
         parent::afterSave($insert, $changedAttributes);
     }
 
@@ -218,8 +204,16 @@ class BlogCategory extends \yii\db\ActiveRecord
         if(file_exists($this->icon_b) && $this->icon_b){
             unlink(Yii::getAlias($this->icon_b));
         }
+        Translate::clear($this);
         return parent::beforeDelete();
     }
+
+    public function afterFind()
+    {
+        parent::afterFind();
+        Translate::getTranslations($this);
+    }
+
 
     public function getLogo($small = true)
     {

@@ -5,22 +5,21 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\BlogCategory;
+use app\models\BannerItem;
 
 /**
- * BlogCategorySearch represents the model behind the search form about `app\models\BlogCategory`.
+ * BannerItemSearch represents the model behind the search form about `app\models\BannerItem`.
  */
-class BlogCategorySearch extends BlogCategory
+class BannerItemSearch extends BannerItem
 {
-    public $title;
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['id', 'numlevel', 'parent_id'], 'integer'],
-            [['icon_b','title', 'icon_s', 'keyword', 'status'], 'safe'],
+            [['id', 'banner_id', 'type', 'show_limit', 'status', 'sorting_number', 'time'], 'integer'],
+            [['code', 'img', 'url', 'show_start', 'show_finish', 'target_blank'], 'safe'],
         ];
     }
 
@@ -40,10 +39,8 @@ class BlogCategorySearch extends BlogCategory
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($query,$params)
     {
-        $query = BlogCategory::find()->groupBy(['id']);
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -56,24 +53,22 @@ class BlogCategorySearch extends BlogCategory
             return $dataProvider;
         }
 
-        $query->with('blogCategories');
-        $query->joinWith('translations');
-
         $query->andFilterWhere([
             'id' => $this->id,
-            'numlevel' => $this->numlevel,
-            'parent_id' => $this->parent_id,
+            'banner_id' => $this->banner_id,
+            'type' => $this->type,
+            'show_start' => $this->show_start,
+            'show_finish' => $this->show_finish,
+            'show_limit' => $this->show_limit,
             'status' => $this->status,
+            'sorting_number' => $this->sorting_number,
+            'time' => $this->time,
         ]);
 
-        $query->andFilterWhere(['like', 'icon_b', $this->icon_b])
-            ->andFilterWhere(['like', 'icon_s', $this->icon_s])
-            ->andFilterWhere(['like', 'keyword', $this->keyword]);
-
-        if($this->title){
-            $query->andWhere(['translate.field_name' => 'title'])
-                ->andFilterWhere(['like', 'translate.field_value', $this->title]);
-        }
+        $query->andFilterWhere(['like', 'code', $this->code])
+            ->andFilterWhere(['like', 'img', $this->img])
+            ->andFilterWhere(['like', 'url', $this->url])
+            ->andFilterWhere(['like', 'target_blank', $this->target_blank]);
 
         return $dataProvider;
     }

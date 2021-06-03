@@ -3,11 +3,13 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\BlogCategory */
-$this->title = Yii::t('app', 'View Category');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Blog Categories'), 'url' => ['index']];
+/* @var $model app\models\Banner */
+
+$this->title = Yii::t('app', 'View Banner');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Banners'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
 <div class="blog-category-index">
    <div id="ajaxCrudDatatable">
       <div id="crud-datatable-pjax" data-pjax-container="" data-pjax-push-state="" data-pjax-timeout="1000">
@@ -30,10 +32,13 @@ $this->params['breadcrumbs'][] = $this->title;
                   <div class="clearfix"></div>
                </div>
                <div id="crud-datatable-container" class="table-responsive kv-grid-container" style="padding:30px;">
-                  <?= $this->render('_form', [
-                      'readOnly' => true,
-                      'model' => $model,
-                      'languages' => $languages 
+                  <?= $this->render('_view_body', [
+                        'model' => $model,
+                        'languages' => $languages,
+                        'searchModelBannerItem' => $searchModelBannerItem,
+                        'dataProviderBannerItem' => $dataProviderBannerItem,
+                        // 'searchModelBannerStatistic' => $searchModelBannerStatistic,
+                        // 'dataProviderBannerStatistic' => $dataProviderBannerStatistic,
                   ]) ?>
                </div>
                <div class="clearfix"></div>
@@ -42,3 +47,5 @@ $this->params['breadcrumbs'][] = $this->title;
       </div>
    </div>
 </div>
+
+
