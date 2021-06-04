@@ -13,7 +13,9 @@ $readOnly = isset($readOnly) ? 1 : 0;
 
 <div class="blog-category-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+            
+        ]); ?>
     <div class="row">
         <div class="col-md-10" style="margin-bottom:30px;">
             <div class="row">

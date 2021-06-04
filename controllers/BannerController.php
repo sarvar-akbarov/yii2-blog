@@ -64,16 +64,19 @@ class BannerController extends Controller
         $searchModelBannerItem = new BannerItemSearch();
         $dataProviderBannerItem = $searchModelBannerItem->search($model->getBannerItems(),Yii::$app->request->queryParams);
 
-        // $searchModelBannerStatistic = new BannerStatisticSearch();
-        // $dataProviderBannerStatistic = $searchModelBannerStatistic->search($model->getBannerStatistics(),Yii::$app->request->queryParams);
+        $searchModelBannerStatistic = new BannerStatisticSearch();
+        $dataProviderBannerStatistic = $searchModelBannerStatistic->search(
+            $id,
+            Yii::$app->request->queryParams
+        );
 
         return $this->render('view', [
             'model' => $model,
             'languages' => $languages,
             'searchModelBannerItem' => $searchModelBannerItem,
             'dataProviderBannerItem' => $dataProviderBannerItem,
-            // 'searchModelBannerStatistic' => $searchModelBannerStatistic,
-            // 'dataProviderBannerStatistic' => $dataProviderBannerStatistic,
+            'searchModelBannerStatistic' => $searchModelBannerStatistic,
+            'dataProviderBannerStatistic' => $dataProviderBannerStatistic,
         ]);
     }
 

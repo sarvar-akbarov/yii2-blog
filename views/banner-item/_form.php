@@ -12,7 +12,13 @@ use kartik\date\DatePicker;
 
 <div class="banner-item-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+        'enableClientValidation' => true,
+        'validateOnSubmit' => false,
+        'validateOnChange' => false,
+        'validateOnBlur' => false,
+        'enableAjaxValidation' => false
+    ]); ?>
     <div class="row">
         <div class="col-md-10">
             <?=$this->render('_translatable_attributes', [
@@ -34,6 +40,7 @@ use kartik\date\DatePicker;
                     <br>
                     <label for="banneritem-file" style="cursor:pointer;">
                         <i class="fa fa-pencil btn btn-default" ></i> <?=$model->getAttributeLabel('img')?>
+                        <?= $form->field($model, 'img')->hiddenInput([])->label(false) ?>
                     </label>
                     <?= $form->field($model, 'file', ['inputOptions' =>['value' => $model->file]])->fileInput(['accept' => 'image/*', 'class' => "poster_image", 'style' => 'display:none;'])->label(false); ?>
                 </div>
@@ -60,19 +67,19 @@ use kartik\date\DatePicker;
                     ]);?>
                 </div>
                 <div class="col-md-2">
-                    <?= $form->field($model, 'time')->textInput(['type' => 'number']) ?>
+                    <?= $form->field($model, 'time')->textInput(['type' => 'number', 'min' => 1]) ?>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-6">
-                    <?= $form->field($model, 'url')->textInput(['maxlength' => true]) ?>
+                    <?= $form->field($model, 'url')->textInput(['maxlength' => true, 'type' => 'url']) ?>
                 </div>
                 <div class="col-md-3">
-                    <?= $form->field($model, 'show_limit')->textInput(['type' => 'number']) ?>
+                    <?= $form->field($model, 'show_limit')->textInput(['type' => 'number', 'min' => 1]) ?>
                 </div>
                 <div class="col-md-3">
-                    <?= $form->field($model, 'sorting_number')->textInput(['type' => 'number']) ?>
+                    <?= $form->field($model, 'sorting_number')->textInput(['type' => 'number', 'min' => 1]) ?>
                 </div>
             </div>
             <div class="row">
@@ -84,17 +91,13 @@ use kartik\date\DatePicker;
                 </div>
             </div>
         </div>
+        <div class="col-md-10 form-group">
+        <hr>
+            <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+            <?=Html::a(Yii::t('app','Cancel'),['/banner/view','id'=>$model->banner_id],['class'=>'btn btn-primary pull-right'])?>         
+        </div>
     </div>
-    
-
-
-    <hr>
-    <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-    </div>
-
     <?php ActiveForm::end(); ?>
-    
 </div>
 <?php
 $typeImg = BannerItem::TYPE_IMAGE;
@@ -109,21 +112,28 @@ $this->registerJs(<<<JS
             reader.readAsDataURL(file);
             reader.onload = function(e){
                 var template = '<img style="width:180px;" src="'+e.target.result+'"> ';
+                $('#banneritem-img').val('ok');
                 $('#polls').html('');
                 $('#polls').append(template);
             };
         });
     });
 
-    $('#banneritem-type').on('change', function(){
-        if($(this).val() == '$typeImg'){
+    function changeView(el=$('#banneritem-type')){
+        if(el.val() == '$typeImg'){
             $('#type-image').show();
             $('#type-code').hide();
         }else{
             $('#type-image').hide();
             $('#type-code').show();
         }
+    }
+
+    $('#banneritem-type').on('change', function(){
+        changeView($(this))
     })
+
+    changeView();
 JS
 );
 ?>

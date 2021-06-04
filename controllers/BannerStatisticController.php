@@ -91,7 +91,7 @@ class BannerStatisticController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($model->load($request->post()) && $model->save()){
                 return [
-                    'forceReload'=>'#crud-datatable-pjax',
+                    'forceReload'=>'#crud-datatable-statistic-pjax',
                     'title'=> Yii::t('app','Create'),
                     'content'=>'<span class="text-success">' . Yii::t('app','Complete successfully') .'</span>',
                     'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
@@ -143,7 +143,7 @@ class BannerStatisticController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($model->load($request->post()) && $model->save()){
                 return [
-                    'forceReload'=>'#crud-datatable-pjax',
+                    'forceReload'=>'#crud-datatable-statistic-pjax',
                     'title'=> Yii::t('app',"BannerStatistic #").$id,
                     'content'=>$this->renderAjax('view', [
                         'model' => $model,
@@ -192,7 +192,7 @@ class BannerStatisticController extends Controller
             *   Process for ajax request
             */
             Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
+            return ['forceClose'=>true,'forceReload'=>'#crud-datatable-statistic-pjax'];
         }else{
             /*
             *   Process for non-ajax request
@@ -224,7 +224,7 @@ class BannerStatisticController extends Controller
             *   Process for ajax request
             */
             Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
+            return ['forceClose'=>true,'forceReload'=>'#crud-datatable-statistic-pjax'];
         }else{
             /*
             *   Process for non-ajax request

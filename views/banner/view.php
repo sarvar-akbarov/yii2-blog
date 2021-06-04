@@ -4,6 +4,7 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Banner */
+use yii\bootstrap\Modal;
 
 $this->title = Yii::t('app', 'View Banner');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Banners'), 'url' => ['index']];
@@ -37,8 +38,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         'languages' => $languages,
                         'searchModelBannerItem' => $searchModelBannerItem,
                         'dataProviderBannerItem' => $dataProviderBannerItem,
-                        // 'searchModelBannerStatistic' => $searchModelBannerStatistic,
-                        // 'dataProviderBannerStatistic' => $dataProviderBannerStatistic,
+                        'searchModelBannerStatistic' => $searchModelBannerStatistic,
+                        'dataProviderBannerStatistic' => $dataProviderBannerStatistic,
                   ]) ?>
                </div>
                <div class="clearfix"></div>
@@ -47,5 +48,8 @@ $this->params['breadcrumbs'][] = $this->title;
       </div>
    </div>
 </div>
-
-
+<?php Modal::begin([
+    "id"=>"ajaxCrudModal",
+    "footer"=>"",// always need it for jquery plugin
+])?>
+<?php Modal::end(); ?>

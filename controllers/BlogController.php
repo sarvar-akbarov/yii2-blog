@@ -3,19 +3,18 @@
 namespace app\controllers;
 
 use Yii;
-use yii\helpers\Html;
-use \yii\web\Response;
+use app\models\Blog;
+use app\models\BlogSearch;
 use yii\web\Controller;
-use app\models\Language;
-use yii\web\UploadedFile;
-use yii\filters\VerbFilter;
-use app\models\LanguageSearch;
 use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
+use \yii\web\Response;
+use yii\helpers\Html;
 
 /**
- * LanguageController implements the CRUD actions for Language model.
+ * BlogController implements the CRUD actions for Blog model.
  */
-class LanguageController extends Controller
+class BlogController extends Controller
 {
     /**
      * @inheritdoc
@@ -34,12 +33,12 @@ class LanguageController extends Controller
     }
 
     /**
-     * Lists all Language models.
+     * Lists all Blog models.
      * @return mixed
      */
     public function actionIndex()
     {    
-        $searchModel = new LanguageSearch();
+        $searchModel = new BlogSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -50,7 +49,7 @@ class LanguageController extends Controller
 
 
     /**
-     * Displays a single Language model.
+     * Displays a single Blog model.
      * @param integer $id
      * @return mixed
      */
@@ -60,7 +59,7 @@ class LanguageController extends Controller
         if($request->isAjax){
             Yii::$app->response->format = Response::FORMAT_JSON;
             return [
-                    'title'=> Yii::t('app',"Language #").$id,
+                    'title'=> Yii::t('app',"Blog #").$id,
                     'content'=>$this->renderAjax('view', [
                         'model' => $this->findModel($id),
                     ]),
@@ -75,7 +74,7 @@ class LanguageController extends Controller
     }
 
     /**
-     * Creates a new Language model.
+     * Creates a new Blog model.
      * For ajax request will return json object
      * and for non-ajax request if creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
@@ -83,37 +82,22 @@ class LanguageController extends Controller
     public function actionCreate()
     {
         $request = Yii::$app->request;
-        $model = new Language();  
+        $model = new Blog();  
 
         if($request->isAjax){
             /*
             *   Process for ajax request
             */
             Yii::$app->response->format = Response::FORMAT_JSON;
-            if($model->load($request->post()) && $model->validate()){
-                $model->file = UploadedFile::getInstance($model, 'file');
-
-                if($model->uploadImage()){
-                    $model->save(false);
-                    return [
-                        'forceReload'=>'#crud-datatable-pjax',
-                        'title'=> Yii::t('app','Create'),
-                        'content'=>'<span class="text-success">' . Yii::t('app','Complete successfully') .'</span>',
-                        'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                Html::a('Create More',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
-            
-                    ];
-                }else{
-                    return [
-                        'title'=> Yii::t('app','Create'),
-                        'content'=>$this->renderAjax('create', [
-                            'model' => $model,
-                        ]),
-                        'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                    Html::button(Yii::t('app','Save'),['class'=>'btn btn-primary','type'=>"submit"])
-            
-                    ];
-                }
+            if($model->load($request->post()) && $model->save()){
+                return [
+                    'forceReload'=>'#crud-datatable-pjax',
+                    'title'=> Yii::t('app','Create'),
+                    'content'=>'<span class="text-success">' . Yii::t('app','Complete successfully') .'</span>',
+                    'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                            Html::a('Create More',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
+        
+                ];         
             }else{           
                 return [
                     'title'=> Yii::t('app','Create'),
@@ -141,7 +125,7 @@ class LanguageController extends Controller
     }
 
     /**
-     * Updates an existing Language model.
+     * Updates an existing Blog model.
      * For ajax request will return json object
      * and for non-ajax request if update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
@@ -158,31 +142,18 @@ class LanguageController extends Controller
             */
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($model->load($request->post()) && $model->save()){
-                $model->file = UploadedFile::getInstance($model, 'file');
-                if($model->uploadImage()){
-                    $model->save(false);
-                    return [
-                        'forceReload'=>'#crud-datatable-pjax',
-                        'title'=> Yii::t('app','Create'),
-                        'content'=>'<span class="text-success">' . Yii::t('app','Complete successfully') .'</span>',
-                        'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                Html::a('Create More',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
-            
-                    ];
-                }else{
-                    return [
-                        'title'=> Yii::t('app','Create'),
-                        'content'=>$this->renderAjax('create', [
-                            'model' => $model,
-                        ]),
-                        'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                    Html::button(Yii::t('app','Save'),['class'=>'btn btn-primary','type'=>"submit"])
-            
-                    ];
-                }
+                return [
+                    'forceReload'=>'#crud-datatable-pjax',
+                    'title'=> Yii::t('app',"Blog #").$id,
+                    'content'=>$this->renderAjax('view', [
+                        'model' => $model,
+                    ]),
+                    'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                            Html::a(Yii::t('app','Edit'),['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
+                ];    
             }else{
                  return [
-                    'title'=> Yii::t('app',"Update Language #").$id,
+                    'title'=> Yii::t('app',"Update Blog #").$id,
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
                     ]),
@@ -205,7 +176,7 @@ class LanguageController extends Controller
     }
 
     /**
-     * Delete an existing Language model.
+     * Delete an existing Blog model.
      * For ajax request will return json object
      * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
@@ -233,7 +204,7 @@ class LanguageController extends Controller
     }
 
      /**
-     * Delete multiple existing Language model.
+     * Delete multiple existing Blog model.
      * For ajax request will return json object
      * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
@@ -264,15 +235,15 @@ class LanguageController extends Controller
     }
 
     /**
-     * Finds the Language model based on its primary key value.
+     * Finds the Blog model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Language the loaded model
+     * @return Blog the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Language::findOne($id)) !== null) {
+        if (($model = Blog::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException(Yii::t('app','The requested page does not exist.'));

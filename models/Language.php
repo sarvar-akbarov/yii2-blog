@@ -18,7 +18,8 @@ use Yii;
  * @property Translate[] $translates
  */
 class Language extends \yii\db\ActiveRecord
-{
+{   
+    public $file;
     
     /**
      * {@inheritdoc}
@@ -34,8 +35,10 @@ class Language extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['code', 'local', 'name'], 'required'],
             [['default', 'status'], 'integer'],
             [['code', 'local', 'name', 'image'], 'string', 'max' => 255],
+            ['file','file']
         ];
     }
 
@@ -50,6 +53,7 @@ class Language extends \yii\db\ActiveRecord
             'local' => 'Местное название',
             'name' => 'Наименование',
             'image' => 'Фотография',
+            'file' => 'Фотография',
             'default' => 'поумолчанию',
             'status' => 'Статус',
         ];
@@ -69,5 +73,39 @@ class Language extends \yii\db\ActiveRecord
     {
         $languages = self::find()->where(['status'=>STATUS_ACTIVE])->orderBy(['default'=>SORT_DESC])->all();
         return \yii\helpers\ArrayHelper::map($languages, 'id', 'local');
+    }
+
+    public static function getDefault()
+    {
+        return [
+            0 => 'Нет',
+            1 => 'Да'
+        ];
+    }
+
+    public function getImage()
+    {
+        if ($this->image){
+            return "<img src='/".$this->image."' alt='Company image' style='width:100px;' />";
+        }else{
+            return false;
+        }
+    }
+
+    public function uploadImage()
+    {
+        if ($this->file && $this->validate()) {
+
+            if($this->image && file_exists($this->image) ){
+                unlink(Yii::getAlias($this->image));
+            }
+
+            $fileName = 'uploads/languages/language_' . time() . '.' . $this->file->extension;
+            $this->file->saveAs($fileName);
+            $this->image =  $fileName;
+            $this->save(false);
+        }
+        
+        return true;
     }
 }

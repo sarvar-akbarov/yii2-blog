@@ -11,6 +11,7 @@ use app\models\BannerItem;
 use yii\filters\VerbFilter;
 use app\models\BannerItemSearch;
 use yii\web\NotFoundHttpException;
+use yii\web\UploadedFile;
 
 /**
  * BannerItemController implements the CRUD actions for BannerItem model.
@@ -90,8 +91,19 @@ class BannerItemController extends Controller
         /*
         *   Process for non-ajax request
         */
-        if ($model->load($request->post()) && $model->save()) {
-            return $this->redirect(['/banner/view', 'id' => $model->banner_id]);
+        if ($model->load($request->post()) && $model->validate()) {
+            $model->file = UploadedFile::getInstance($model, 'file');
+
+            if($model->uploadImage()){
+                $model->save(false);
+                return $this->redirect(['/banner/view', 'id' => $model->banner_id]);
+            }else{
+                return $this->render('create', [
+                    'model' => $model,
+                    'languages' => $languages
+                ]);
+            }
+            
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -110,15 +122,28 @@ class BannerItemController extends Controller
     public function actionUpdate($id)
     {
         $request = Yii::$app->request;
-        $model = $this->findModel($id);       
+        $model = $this->findModel($id);  
+        $languages = Language::getLanguageList();
+
         /*
         *   Process for non-ajax request
         */
         if ($model->load($request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            $model->file = UploadedFile::getInstance($model, 'file');
+
+            if($model->uploadImage()){
+                $model->save(false);
+                return $this->redirect(['/banner/view', 'id' => $model->banner_id]);
+            }else{
+                return $this->render('create', [
+                    'model' => $model,
+                    'languages' => $languages
+                ]);
+            }
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'languages' => $languages
             ]);
         }
     }
@@ -140,7 +165,7 @@ class BannerItemController extends Controller
             *   Process for ajax request
             */
             Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
+            return ['forceClose'=>true,'forceReload'=>'#crud-datatable-banner-pjax'];
         }else{
             /*
             *   Process for non-ajax request
@@ -172,7 +197,7 @@ class BannerItemController extends Controller
             *   Process for ajax request
             */
             Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
+            return ['forceClose'=>true,'forceReload'=>'#crud-datatable-banner-pjax'];
         }else{
             /*
             *   Process for non-ajax request

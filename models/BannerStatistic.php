@@ -56,8 +56,8 @@ class BannerStatistic extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getBanner()
+    public function getBannerItems()
     {
-        return $this->hasOne(BannerItem::className(), ['id' => 'banner_id']);
+        return $this->hasOne(BannerItem::className(), ['id' => 'banner_id'])->joinWith('banner');
     }
 }

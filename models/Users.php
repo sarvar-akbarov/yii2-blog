@@ -140,4 +140,9 @@ class Users extends \yii\db\ActiveRecord
             self::MODERATOR => Yii::t('app','Moderator'),
         ];
     }
+
+    public function isAdmin()
+    {
+        return $this->permission == self::ADMIN;
+    }
 }

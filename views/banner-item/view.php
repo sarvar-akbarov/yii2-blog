@@ -1,5 +1,6 @@
 <?php
 
+use app\models\BannerItem;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
@@ -11,18 +12,51 @@ use yii\widgets\DetailView;
         'model' => $model,
         'attributes' => [
             'id',
-            'banner_id',
-            'type',
-            'code:ntext',
-            'img',
+            
+            [
+                'attribute'=>'title',
+                'value' => function($model){
+                    return array_values($model->translatableAttr['title'])[0];
+                }
+            ],
+            [
+                'attribute'=>'target_blank',
+                'value' => function($model){
+                    return BannerItem::getTarget()[$model->target_blank];
+                }
+            ],
+            [
+                'attribute'=>'status',
+                'value' => function($model){
+                    return getStatus()[$model->status];
+                }
+            ],
             'url:url',
-            'show_start',
-            'show_finish',
+            
+            [
+                'attribute'=>'type',
+                'value' => function($model){
+                    return BannerItem::getTypeList()[$model->type];
+                }
+            ],
+            [
+                'attribute'=>'code',
+                'format' => 'ntext',
+                'visible' => !$model->getImage(),
+            ],
+            [
+                'attribute'=>'img',
+                'format' => 'raw',
+                'visible' => $model->getImage(),
+                'value' => function($model){
+                    return $model->getImage() ? $model->getImage() : '';
+                }
+            ],
+            'show_start:date',
+            'show_finish:date',
             'show_limit',
-            'status',
-            'target_blank',
             'sorting_number',
-            'time:datetime',
+            'time',
         ],
     ]) ?>
 

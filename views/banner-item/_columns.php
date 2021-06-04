@@ -1,5 +1,8 @@
 <?php
+
+use app\models\Banner;
 use yii\helpers\Url;
+use app\models\BannerItem;
 
 return [
     [
@@ -14,26 +17,48 @@ return [
         // 'class'=>'\kartik\grid\DataColumn',
         // 'attribute'=>'id',
     // ],
+    
+    
+    // [
+    //     'class'=>'\kartik\grid\DataColumn',
+    //     'attribute'=>'img',
+    //     'format' => 'html',
+    //     'content' => function($model){
+    //         return $model->getImage() ? $model->getImage() : '';
+    //     }
+    // ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'banner_id',
+        'attribute'=>'title',
+        'value' => function($model){
+            return array_values($model->translatableAttr['title'])[0];
+        }
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'type',
+        'value' => function($model){
+            return BannerItem::getTypeList()[$model->type];
+        },
+        'filter' => BannerItem::getTypeList()
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'code',
+        'attribute'=>'target_blank',
+        'value' => function($model){
+            return BannerItem::getTarget()[$model->target_blank];
+        },
+        'filter' => BannerItem::getTarget()
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'img',
+        'attribute'=>'status',
+        'value' => function($model){
+            return getStatus()[$model->status];
+        },
+        'filter' => getStatus()
     ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'url',
-    ],
+    
     // [
         // 'class'=>'\kartik\grid\DataColumn',
         // 'attribute'=>'show_start',

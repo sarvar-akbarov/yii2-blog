@@ -1,6 +1,4 @@
 <?php
-
-use app\models\Language;
 use yii\helpers\Url;
 
 return [
@@ -12,28 +10,38 @@ return [
         'class' => 'kartik\grid\SerialColumn',
         'width' => '30px',
     ],
-    
+        // [
+        // 'class'=>'\kartik\grid\DataColumn',
+        // 'attribute'=>'id',
+    // ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'local',
+        'attribute'=>'category_id',
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'default',
-        'value' => function($model){
-            return Language::getDefault()[$model->default];
-        },
-        'filter' => Language::getDefault()
-
+        'attribute'=>'user_id',
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'status',
-        'value' => function($model){
-            return getStatus()[$model->status];
-        },
-        'filter' => getStatus()
+        'attribute'=>'date_cr',
     ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'slug',
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'image',
+    ],
+    // [
+        // 'class'=>'\kartik\grid\DataColumn',
+        // 'attribute'=>'status',
+    // ],
+    // [
+        // 'class'=>'\kartik\grid\DataColumn',
+        // 'attribute'=>'view_count',
+    // ],
     [
         'class' => 'kartik\grid\ActionColumn',
         'dropdown' => false,

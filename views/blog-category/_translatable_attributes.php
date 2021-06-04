@@ -24,9 +24,9 @@
                     <div class="col-md-12">
                         <?php foreach($model->translatableAttributes() as $name=>$type):?>
                                 <?php if($type == 'string'):?>
-                                    <?= $form->field($model, "translatableAttr[$name][$key]")->textInput(['maxlength' => true])->label($model->getAttributeLabel($name)) ?>
+                                    <?= $form->field($model, "translatableAttr[$name][$key]")->textInput(['maxlength' => true,'id' => 'attr-'.$name.'-'.$i])->label($model->getAttributeLabel($name)) ?>
                                 <?php elseif($type == 'text'): ?>
-                                    <?= $form->field($model, "translatableAttr[$name][$key]")->textarea(['rows' => 6])->label($model->getAttributeLabel($name)) ?>
+                                    <?= $form->field($model, "translatableAttr[$name][$key]")->textarea(['rows' => 6,'id' => 'attr-'.$name.'-'.$i])->label($model->getAttributeLabel($name)) ?>
                                 <?php endif; ?>
                         <?php endforeach ?>
                     </div>
@@ -47,7 +47,7 @@ $this->registerJs(<<<JS
     var arr = '$required_fields'.split(',');
     var error_message = 'error';                                
     for (i =0; i < arr.length;  i++){
-        let id = 'blogcategory-translatableattr-' + arr[i] +'-1';
+        let id = 'attr-' + arr[i] +'-1';
         div = $('#'+id).parent();
         div.addClass('required has-error');
         error_div = $('#'+id).next('div')

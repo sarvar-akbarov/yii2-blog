@@ -59,6 +59,7 @@ class BannerItem extends \yii\db\ActiveRecord
             [['img'], 'required', 'when' => function($model){return $model->type == self::TYPE_IMAGE;}],
             [['banner_id', 'type', 'show_limit', 'status', 'target_blank', 'sorting_number', 'time', 'tab'], 'integer'],
             [['code'], 'string'],
+            [['url'],'url'],
             [['show_start', 'show_finish'], 'safe'],
             [['img', 'url'], 'string', 'max' => 255],
             [['banner_id'], 'exist', 'skipOnError' => true, 'targetClass' => Banner::className(), 'targetAttribute' => ['banner_id' => 'id']],
@@ -141,6 +142,9 @@ class BannerItem extends \yii\db\ActiveRecord
 
     public function beforeSave($insert)
     {
+        $this->show_start = Yii::$app->formatter->asDate($this->show_start, 'php:Y-m-d');
+        $this->show_finish = Yii::$app->formatter->asDate($this->show_finish, 'php:Y-m-d');
+
         return parent::beforeSave($insert);
     }
 
@@ -204,7 +208,7 @@ class BannerItem extends \yii\db\ActiveRecord
                 unlink(Yii::getAlias($this->img));
             }
 
-            $fileName = 'images/banner_img_' . time() . '.' . $this->file->extension;
+            $fileName = 'uploads/banner-item/banner_img_' . time() . '.' . $this->file->extension;
             $this->file->saveAs($fileName);
             $this->img =  $fileName;
             $this->save(false);

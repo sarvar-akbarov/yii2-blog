@@ -5,12 +5,12 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\BannerStatistic;
+use app\models\Blog;
 
 /**
- * BannerStatisticSearch represents the model behind the search form about `app\models\BannerStatistic`.
+ * BlogSearch represents the model behind the search form about `app\models\Blog`.
  */
-class BannerStatisticSearch extends BannerStatistic
+class BlogSearch extends Blog
 {
     /**
      * @inheritdoc
@@ -18,8 +18,8 @@ class BannerStatisticSearch extends BannerStatistic
     public function rules()
     {
         return [
-            [['id', 'clicks', 'shows'], 'integer'],
-            [['date', 'banner_id'], 'safe'],
+            [['id', 'category_id', 'user_id', 'status', 'view_count'], 'integer'],
+            [['date_cr', 'slug', 'image'], 'safe'],
         ];
     }
 
@@ -39,16 +39,15 @@ class BannerStatisticSearch extends BannerStatistic
      *
      * @return ActiveDataProvider
      */
-    public function search($id, $params)
+    public function search($params)
     {
-        $query = BannerStatistic::find()->orderBy(['date' => SORT_DESC]);
+        $query = Blog::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
 
         $this->load($params);
-        $query->joinWith(['bannerItems'])->where(['banner.id' => $id]);    
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
@@ -58,12 +57,15 @@ class BannerStatisticSearch extends BannerStatistic
 
         $query->andFilterWhere([
             'id' => $this->id,
-            'date' => $this->date,
-            'clicks' => $this->clicks,
-            'shows' => $this->shows,
+            'category_id' => $this->category_id,
+            'user_id' => $this->user_id,
+            'date_cr' => $this->date_cr,
+            'status' => $this->status,
+            'view_count' => $this->view_count,
         ]);
-        
-        $query->andFilterWhere(['like', 'banner_id', $this->banner_id]);
+
+        $query->andFilterWhere(['like', 'slug', $this->slug])
+            ->andFilterWhere(['like', 'image', $this->image]);
 
         return $dataProvider;
     }

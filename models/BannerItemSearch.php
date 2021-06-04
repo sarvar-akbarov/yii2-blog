@@ -12,6 +12,8 @@ use app\models\BannerItem;
  */
 class BannerItemSearch extends BannerItem
 {
+    public $title;
+
     /**
      * @inheritdoc
      */
@@ -19,7 +21,7 @@ class BannerItemSearch extends BannerItem
     {
         return [
             [['id', 'banner_id', 'type', 'show_limit', 'status', 'sorting_number', 'time'], 'integer'],
-            [['code', 'img', 'url', 'show_start', 'show_finish', 'target_blank'], 'safe'],
+            [['code', 'img', 'url','title', 'show_start', 'show_finish', 'target_blank'], 'safe'],
         ];
     }
 
@@ -42,7 +44,7 @@ class BannerItemSearch extends BannerItem
     public function search($query,$params)
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => $query,
+            'query' => $query->groupBy(['id']),
         ]);
 
         $this->load($params);
@@ -52,6 +54,9 @@ class BannerItemSearch extends BannerItem
             // $query->where('0=1');
             return $dataProvider;
         }
+
+        
+        $query->joinWith('translations');
 
         $query->andFilterWhere([
             'id' => $this->id,
@@ -69,7 +74,12 @@ class BannerItemSearch extends BannerItem
             ->andFilterWhere(['like', 'img', $this->img])
             ->andFilterWhere(['like', 'url', $this->url])
             ->andFilterWhere(['like', 'target_blank', $this->target_blank]);
-
+        
+        if($this->title){
+            $query->andWhere(['translate.field_name' => 'title'])
+                ->andFilterWhere(['like', 'translate.field_value', $this->title]);
+        }
+        
         return $dataProvider;
     }
 }

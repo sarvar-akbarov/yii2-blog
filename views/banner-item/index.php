@@ -12,7 +12,7 @@ CrudAsset::register($this);
 <div class="banner-item-index">
     <div id="ajaxCrudDatatable">
         <?=GridView::widget([
-            'id'=>'crud-datatable',
+            'id'=>'crud-datatable-banner',
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
             'pjax'=>true,
