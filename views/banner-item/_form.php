@@ -3,6 +3,7 @@
 use app\models\BannerItem;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use kartik\date\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\BannerItem */
@@ -41,22 +42,47 @@ use yii\widgets\ActiveForm;
                 <?= $form->field($model, 'code')->textarea(['rows' => 6]) ?>
             </div>
             <hr>                
-            
+            <div class="row">
+                <div class="col-md-5">
+                    <?= $form->field($model, 'show_start')->widget(DatePicker::classname(), [
+                        'options' => ['placeholder' => Yii::t('app','Select')],
+                        'pluginOptions' => [
+                            'autoclose'=>true
+                        ]
+                    ]);?>
+                </div>
+                <div class="col-md-5">
+                    <?= $form->field($model, 'show_finish')->widget(DatePicker::classname(), [
+                        'options' => ['placeholder' => Yii::t('app','Select')],
+                        'pluginOptions' => [
+                            'autoclose'=>true
+                        ]
+                    ]);?>
+                </div>
+                <div class="col-md-2">
+                    <?= $form->field($model, 'time')->textInput(['type' => 'number']) ?>
+                </div>
+            </div>
 
-            <?= $form->field($model, 'url')->textInput(['maxlength' => true]) ?>
-
-            <?= $form->field($model, 'show_start')->textInput() ?>
-
-            <?= $form->field($model, 'show_finish')->textInput() ?>
-
-            <?= $form->field($model, 'show_limit')->textInput() ?>
-            <?= $form->field($model, 'status')->dropDownList(getStatus()) ?>
-
-            <?= $form->field($model, 'target_blank')->textInput() ?>
-
-            <?= $form->field($model, 'sorting_number')->textInput() ?>
-
-            <?= $form->field($model, 'time')->textInput() ?>
+            <div class="row">
+                <div class="col-md-6">
+                    <?= $form->field($model, 'url')->textInput(['maxlength' => true]) ?>
+                </div>
+                <div class="col-md-3">
+                    <?= $form->field($model, 'show_limit')->textInput(['type' => 'number']) ?>
+                </div>
+                <div class="col-md-3">
+                    <?= $form->field($model, 'sorting_number')->textInput(['type' => 'number']) ?>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <?= $form->field($model, 'status')->dropDownList(getStatus()) ?>
+                </div>
+                <div class="col-md-6">
+                    <?= $form->field($model, 'target_blank')->dropDownList(BannerItem::getTarget()) ?>
+                </div>
+            </div>
         </div>
     </div>
     

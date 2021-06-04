@@ -19,8 +19,8 @@
             ],
             ["label" => "Yangiliklar", "url" => ["/articles/news"], "icon" => "newspaper-o"],
             [
-                "label" => "Taqdimotlar",
-                "url" => ["/presentation/list"],
+                "label" => Yii::t('app','Banners'),
+                "url" => ["/banner"],
                 "icon" => "file-image-o"
             ],
             [

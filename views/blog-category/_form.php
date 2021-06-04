@@ -14,7 +14,6 @@ $readOnly = isset($readOnly) ? 1 : 0;
 <div class="blog-category-form">
 
     <?php $form = ActiveForm::begin(); ?>
-    
     <div class="row">
         <div class="col-md-10" style="margin-bottom:30px;">
             <div class="row">
@@ -65,20 +64,13 @@ $readOnly = isset($readOnly) ? 1 : 0;
             <button type="button" class="btn btn-primary pull-right" onclick="window.location.href='index'" > <?= Yii::t('app','Cancel') ?></button>
         </div>
     </div>
-  
-	
-    
-
-
     <?php ActiveForm::end(); ?>
-    
 </div>
 <?php
  
 $this->registerJs(<<<JS
 
     if($readOnly == '1'){
-        // $('input[type="text"],input[type="file"],select, textarea').attr('readonly','readonly');
         $('input[type="text"],input[type="file"],select, textarea').attr('disabled','true');
     }
 

@@ -54,6 +54,9 @@ class BannerItem extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['time','show_limit','show_start','show_finish','url'],'required'],
+            [['code'], 'required', 'when' => function($model){return $model->type == self::TYPE_CODE;}],
+            [['img'], 'required', 'when' => function($model){return $model->type == self::TYPE_IMAGE;}],
             [['banner_id', 'type', 'show_limit', 'status', 'target_blank', 'sorting_number', 'time', 'tab'], 'integer'],
             [['code'], 'string'],
             [['show_start', 'show_finish'], 'safe'],
@@ -66,7 +69,7 @@ class BannerItem extends \yii\db\ActiveRecord
 
     public function validateAttr($attribute, $params, $validator)
     {
-        $required = ['title','mtitle'];
+        $required = ['title', 'description', 'alt'];
         $fields = array_keys($this->$attribute);
         $errors = [];
         foreach($fields as $field){

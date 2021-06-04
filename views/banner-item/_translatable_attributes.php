@@ -1,6 +1,9 @@
 <?php
 
 ?>
+<pre>
+<?php print_r($model->errors)?>
+</pre>
 <!-- <div class="alert alert-danger alert-dismissible fade in" role="alert">
     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
     </button>
@@ -47,7 +50,7 @@ $this->registerJs(<<<JS
     var arr = '$required_fields'.split(',');
     var error_message = 'error';                                
     for (i =0; i < arr.length;  i++){
-        let id = 'blogcategory-translatableattr-' + arr[i] +'-1';
+        let id = 'banneritem-translatableattr-' + arr[i] +'-1';
         div = $('#'+id).parent();
         div.addClass('required has-error');
         error_div = $('#'+id).next('div')
