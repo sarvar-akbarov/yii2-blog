@@ -16,7 +16,15 @@ return [
     // ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'code',
+        'attribute'=>'type',
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'user_id',
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'user_ip',
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
@@ -24,12 +32,28 @@ return [
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'default',
+        'attribute'=>'email',
     ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'status',
-    ],
+    // [
+        // 'class'=>'\kartik\grid\DataColumn',
+        // 'attribute'=>'phone',
+    // ],
+    // [
+        // 'class'=>'\kartik\grid\DataColumn',
+        // 'attribute'=>'message',
+    // ],
+    // [
+        // 'class'=>'\kartik\grid\DataColumn',
+        // 'attribute'=>'user_agent',
+    // ],
+    // [
+        // 'class'=>'\kartik\grid\DataColumn',
+        // 'attribute'=>'date_cr',
+    // ],
+    // [
+        // 'class'=>'\kartik\grid\DataColumn',
+        // 'attribute'=>'viewed',
+    // ],
     [
         'class' => 'kartik\grid\ActionColumn',
         'dropdown' => false,

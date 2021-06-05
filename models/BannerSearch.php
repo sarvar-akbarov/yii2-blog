@@ -59,11 +59,11 @@ class BannerSearch extends Banner
 
         $query->andFilterWhere([
             'id' => $this->id,
-            'status' => $this->status,
+            'banner.status' => $this->status,
         ]);
 
-        $query->andFilterWhere(['like', 'keyword', $this->keyword])
-            ->andFilterWhere(['like', 'title', $this->title]);
+        $query->andFilterWhere(['like', 'banner.keyword', $this->keyword])
+            ->andFilterWhere(['like', 'banner.title', $this->title]);
 
         return $dataProvider;
     }

@@ -2,21 +2,21 @@
     [
         "items" => [
             ["label" => "Bosh Sahifa", "url" => "/", "icon" => "home"],
-            [
-                "label" => "Test",
-                "url" => "#",
-                "icon" => "bar-chart",
-                "items" => [
-                    [
-                        "label" => Yii::t('app', 'Start exam'),
-                        "url" => "/exam",
-                    ],
-                    [
-                        "label" => Yii::t('app','Results'),
-                        "url" => "/results",
-                    ],
-                ],
-            ],
+            // [
+            //     "label" => "Test",
+            //     "url" => "#",
+            //     "icon" => "bar-chart",
+            //     "items" => [
+            //         [
+            //             "label" => Yii::t('app', 'Start exam'),
+            //             "url" => "/exam",
+            //         ],
+            //         [
+            //             "label" => Yii::t('app','Results'),
+            //             "url" => "/results",
+            //         ],
+            //     ],
+            // ],
             ["label" => Yii::t('app','Blogs'), "url" => ["/blog"], "icon" => "newspaper-o"],
             [
                 "label" => Yii::t('app','Banners'),

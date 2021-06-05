@@ -93,8 +93,8 @@ use kartik\date\DatePicker;
         </div>
         <div class="col-md-10 form-group">
         <hr>
-            <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-            <?=Html::a(Yii::t('app','Cancel'),['/banner/view','id'=>$model->banner_id],['class'=>'btn btn-primary pull-right'])?>         
+            <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success pull-right' : 'btn btn-primary pull-right']) ?>
+            <?= Html::a(Yii::t('app','Cancel'),['/banner/view','id'=>$model->banner_id],['class'=>'btn btn-default pull-left'])?>         
         </div>
     </div>
     <?php ActiveForm::end(); ?>

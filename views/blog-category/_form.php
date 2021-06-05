@@ -61,9 +61,9 @@ $readOnly = isset($readOnly) ? 1 : 0;
             <?php if($readOnly): ?>
                 <?= Html::a(Yii::t('app','Edit'), ['update','id' => $model->id], ['class' => 'btn btn-info'])?>
             <?php else: ?>
-                <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+                <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success pull-right' : 'btn btn-primary pull-right']) ?>
             <?php endif ?>
-            <button type="button" class="btn btn-primary pull-right" onclick="window.location.href='index'" > <?= Yii::t('app','Cancel') ?></button>
+            <button type="button" class="btn btn-primary pull-left" onclick="window.location.href='index'" > <?= Yii::t('app','Cancel') ?></button>
         </div>
     </div>
     <?php ActiveForm::end(); ?>

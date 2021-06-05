@@ -5,23 +5,21 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Blog;
+use app\models\Contact;
 
 /**
- * BlogSearch represents the model behind the search form about `app\models\Blog`.
+ * ContactSearch represents the model behind the search form about `app\models\Contact`.
  */
-class BlogSearch extends Blog
+class ContactSearch extends Contact
 {
-    public $title;
-
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['id', 'status', 'view_count'], 'integer'],
-            [['date_cr','category_id', 'slug', 'user_id', 'title'], 'safe'],
+            [['id', 'type', 'user_id'], 'integer'],
+            [['user_ip', 'name', 'email', 'phone', 'message', 'user_agent', 'date_cr', 'viewed'], 'safe'],
         ];
     }
 
@@ -43,7 +41,7 @@ class BlogSearch extends Blog
      */
     public function search($params)
     {
-        $query = Blog::find();
+        $query = Contact::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -56,24 +54,21 @@ class BlogSearch extends Blog
             // $query->where('0=1');
             return $dataProvider;
         }
-        $query->joinWith(['category', 'translations', 'user']);
 
         $query->andFilterWhere([
             'id' => $this->id,
-            'blog.date_cr' => $this->date_cr,
-            'blog.status' => $this->status,
-            'blog.category_id' => $this->category_id,
-            'blog.view_count' => $this->view_count,
+            'type' => $this->type,
+            'user_id' => $this->user_id,
+            'date_cr' => $this->date_cr,
         ]);
 
-        $query->andFilterWhere(['like', 'blog.slug', $this->slug])
-            ->andFilterWhere(['like', 'blog.image', $this->image])
-            ->andFilterWhere(['like', 'user.fio', $this->user_id]);
-        
-        if($this->title){
-            $query->andWhere(['translate.field_name' => 'title'])
-                ->andFilterWhere(['like', 'translate.field_value', $this->title]);
-        }
+        $query->andFilterWhere(['like', 'user_ip', $this->user_ip])
+            ->andFilterWhere(['like', 'name', $this->name])
+            ->andFilterWhere(['like', 'email', $this->email])
+            ->andFilterWhere(['like', 'phone', $this->phone])
+            ->andFilterWhere(['like', 'message', $this->message])
+            ->andFilterWhere(['like', 'user_agent', $this->user_agent])
+            ->andFilterWhere(['like', 'viewed', $this->viewed]);
 
         return $dataProvider;
     }

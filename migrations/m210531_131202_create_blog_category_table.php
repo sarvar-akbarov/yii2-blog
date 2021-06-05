@@ -57,6 +57,7 @@ class m210531_131202_create_blog_category_table extends Migration
             'id',
             'CASCADE'
         );
+        
     }
 
     /**

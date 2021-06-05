@@ -42,7 +42,7 @@ class BlogCategorySearch extends BlogCategory
      */
     public function search($params)
     {
-        $query = BlogCategory::find()->groupBy(['id']);
+        $query = BlogCategory::find()->where(['parent_id' => null])->groupBy(['id']);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

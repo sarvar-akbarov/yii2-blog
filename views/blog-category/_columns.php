@@ -48,7 +48,8 @@ return [
         'attribute'=>'status',
         'value' => function($model){
             return getStatus()[$model->status];
-        }
+        },
+        'filter' => getStatus()
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
